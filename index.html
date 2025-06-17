@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Attendance Tracker</title>
+    <!-- jQuery CDN -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  </head>
+  <body>
+    <h2>Attendance Tracker</h2>
+
+    <form id="attendanceForm">
+      <label>Employee Name:</label><br />
+      <input type="text" id="employeeName" required /><br /><br />
+
+      <label>Date:</label><br />
+      <input type="date" id="attendanceDate" required /><br /><br />
+
+      <button type="submit">Submit</button>
+    </form>
+
+    <p id="statusMsg"></p>
+
+    <script>
+      $(document).ready(function () {
+        $("#attendanceForm").submit(function (e) {
+          e.preventDefault();
+
+          let name = $("#employeeName").val();
+          let date = $("#attendanceDate").val();
+
+          $.ajax({
+            url: "submit_attendance.php",
+            type: "POST",
+            data: { employeeName: name, attendanceDate: date },
+            success: function (response) {
+              $("#statusMsg").text(response).css("color", "green");
+              $("#attendanceForm")[0].reset();
+            },
+            error: function () {
+              $("#statusMsg")
+                .text("Error submitting attendance.")
+                .css("color", "red");
+            },
+          });
+        });
+      });
+    </script>
+  </body>
+</html>
